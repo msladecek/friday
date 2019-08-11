@@ -78,7 +78,7 @@ const set_time = () => {
     let now = moment();
     let weekend = (now.isoWeekday() > 5);
     let actual_day = now.format("dddd");
-    let msg = weekend ? ("No, it's not. In fact it's " + actual_day + ", which is even better!") : "Yes, it is!";
+    let msg = weekend ? ("No, it's not.<br>In fact it's " + actual_day + ", which is even better!") : "Yes, it is!";
     let daystr =  weekend ? actual_day : "Friday";
     document.getElementById("message").innerHTML = msg;
     document.getElementById("clock").innerHTML = daystr + ", "+ now.format("MMMM Do Y, H:mm:ss");
