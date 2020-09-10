@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<style>
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:500,700);
+
+html {
+  color: #fff;
+  background-color: #1e1f26;
+  font-family: Roboto;
+  text-align: center; 
+}
+
+#page {
+  display: inline-block;
+}
+
+#label {
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+#counter {
+  font-size: 3em;
+  font-weight: 700;
+}
+</style>
+
+
+<head>
+  <meta charset="utf-8"/>
+  <title>Seconds until Friday</title>
+</head>
+
+
+<body>
+  <div id="page">
+    <div id="label">Seconds until <span id="target"></span></div>
+    <div id="counter"></div>
+  </div>
+</body>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script>
+setInterval(function() {
+  let target = moment().days(5).hours(17).minutes(30).seconds(0);
+  let diff = target.format('X') - moment().format('X');
+  document.getElementById('target').innerHTML = target.format('dddd HH:mm');
+  document.getElementById('counter').innerHTML = diff;
+}, 1000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<style>
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:500,700);
+
+html {
+  color: #fff;
+  background-color: #1e1f26;
+  font-family: Roboto;
+  text-align: center; 
+}
+
+#page {
+  display: inline-block;
+}
+
+#clock {
+  font-size: 5em;
+  font-weight: 700;
+}
+
+  
+</style>
+
+<head>
+  <meta charset="utf-8"/>
+  <title>Clock</title>
+</head>
+
+<body>
+
+<div class="page">
+  <div id="clock"></div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script>
+setInterval(function(){document.getElementById('clock').innerHTML = moment().format('HH:mm:ss');}, 1000);
+</script>
+
+</body>
+</html>
