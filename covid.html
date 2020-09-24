@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html>
+
+  <style>
+    #vis {
+        width: 100%
+    }
+  </style>
+
+  <head>
+    <meta charset="utf-8" />
+    <title>Covid 19 in Czech Republic</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.16.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.16.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.12.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@1.25.0/build/global/luxon.min.js"></script>
+  </head>
+  <body>
+
+    <div id="vis"></div>
+
+    <script type="text/javascript">
+      let current_label_font_size = 40;
+      let axis_font_size = 30;
+      let title_font_size = 35;
+      let horizontal_rule_width = 2;
+      let cumulative_chart_color = "steelblue";
+      let increment_chart_color = "red";
+      let now = luxon.DateTime.local();
+      let spec = {
+          "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+          "data": {
+              "url": "https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/nakaza.min.json",
+              "format": {"type": "json", "property": "data"}
+          },
+          "title": {
+              "text": "Confirmed COVID-19 cases in Czech Republic according to mzcr.cz",
+              "fontSize": title_font_size
+          },
+          "width": "container",
+          "height": 800,
+          "encoding": {
+              "x": {
+                  "field": "datum",
+                  "type": "temporal",
+                  "title": "date",
+                  "axis": {
+                      "titleFontSize": axis_font_size,
+                      "labelFontSize": axis_font_size
+                  }
+              }
+          },
+          "layer": [
+              {
+                  "selection": {
+                      "at_time": {
+                          "type": "single",
+                          "on": "mouseover",
+                          "encodings": ["x"],
+                          "nearest": true,
+                          "init": {"x": {"year": now.year, "month": now.month, "date": now.date}}
+                      }
+                  },
+                  "mark": "point",
+                  "encoding": {"opacity": {"value": 0}}
+              },
+              {
+                  "transform": [{"filter": {"selection": "at_time"}}],
+                  "layer": [
+                      {
+                          "mark": "rule"
+                      },
+                      {
+                          "mark": {
+                              "type": "text",
+                              "align": "center", 
+                              "baseline":"bottom",
+                              "fontSize": current_label_font_size,
+                              "dy": -current_label_font_size/2
+                          },
+                          "encoding": {
+                              "y": {"value": 0},
+                              "text": {
+                                  "field": "datum",
+                                  "type": "temporal"
+                              }
+                          }
+                      }
+                  ]
+              },
+              {
+                  "encoding": {
+                      "y": {
+                          "field": "kumulativni_pocet_nakazenych",
+                          "type": "quantitative",
+                          "title": "cumulative total confirmed cases",
+                          "axis": {
+                              "titleColor": cumulative_chart_color,
+                              "titleFontSize": axis_font_size,
+                              "labelFontSize": axis_font_size
+                          }
+                      },
+                      "text": {"field": "kumulativni_pocet_nakazenych"},
+                      "color": {"value": cumulative_chart_color}
+                  },
+                  "layer": [
+                      {
+                          "transform": [{"filter": {"selection": "at_time"}}],
+                          "layer": [
+                              {
+                                  "mark": {"type": "rule", "strokeWidth": horizontal_rule_width},
+                                  "encoding": {"x": null}
+                              },
+                              {
+                                  "mark": {
+                                      "type": "text", 
+                                      "align":"right", 
+                                      "baseline": "bottom",
+                                      "fontSize": current_label_font_size
+                                  },
+                                  "encoding": {
+                                      "x": {"aggregate": "max", "field": "datum"}
+                                  }
+                              }
+                          ]
+                      },
+                      {
+                          "mark": {"type": "area", "opacity": 0.4}
+                      }
+                  ]
+              },
+              {
+                  "encoding": {
+                      "y": {
+                          "field": "prirustkovy_pocet_nakazenych",
+                          "type": "quantitative",
+                          "title": "new confirmed cases",
+                          "axis": {
+                              "titleColor": increment_chart_color,
+                              "titleFontSize": axis_font_size,
+                              "labelFontSize": axis_font_size
+                          }
+                      },
+                      "text": {"field": "prirustkovy_pocet_nakazenych"},
+                      "color": {"value": increment_chart_color}
+                  },
+                  "layer": [
+                      {
+                          "mark": {"type": "line", "opacity": 1, "color": increment_chart_color}
+                      },
+                      {
+                          "transform": [{"filter": {"selection": "at_time"}}],
+                          "layer": [
+                              {
+                                  "mark": {"type": "rule", "strokeWidth": horizontal_rule_width},
+                                  "encoding": {"x": null}
+                              },
+                              {
+                                  "mark": {
+                                      "type": "text", 
+                                      "align": "left", 
+                                      "baseline": "bottom",
+                                      "fontSize": current_label_font_size,
+                                      "fontWeight": "bold",
+                                      "strokeWidth": 1.5,
+                                      "stroke": "white",
+                                      "strokeOpacity": 0.6,
+                                      "strokeOffset": 0.2
+                                  },
+                                  "encoding": {
+                                      "x": {"aggregate": "max", "field": "datum"}
+                                  }
+                              }
+                          ]
+                      }
+                  ]
+              }
+          ],
+          "resolve": {"scale": {"y": "independent"}}
+      };
+      let embed = () => vegaEmbed('#vis', spec);
+      setInterval(embed, 3600000);
+      embed();
+    </script>
+  </body>
+</html>
