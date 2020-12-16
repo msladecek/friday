@@ -131,11 +131,23 @@
                   ]
               },
               {
+                  "transform": [
+                      {
+                          "window": [
+                              {
+                                  "op": "average",
+                                  "field": "prirustkovy_pocet_nakazenych",
+                                  "as": "new_cases_seven_day_average"
+                              },
+                          ],
+                          "frame": [-7, 0]
+                      }
+                  ],
                   "encoding": {
                       "y": {
-                          "field": "prirustkovy_pocet_nakazenych",
+                          "field": "new_cases_seven_day_average",
                           "type": "quantitative",
-                          "title": "new confirmed cases",
+                          "title": "new confirmed cases (7 day average)",
                           "axis": {
                               "titleColor": increment_chart_color,
                               "titleFontSize": axis_font_size,
