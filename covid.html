@@ -139,8 +139,18 @@
                                   "field": "prirustkovy_pocet_nakazenych",
                                   "as": "new_cases_seven_day_average"
                               },
+                              {
+                                  "op": "ci0",
+                                  "field": "prirustkovy_pocet_nakazenych",
+                                  "as": "new_cases_seven_day_ci0"
+                              },
+                              {
+                                  "op": "ci1",
+                                  "field": "prirustkovy_pocet_nakazenych",
+                                  "as": "new_cases_seven_day_ci1"
+                              },
                           ],
-                          "frame": [-7, 0]
+                          "frame": [-3, 3]
                       }
                   ],
                   "encoding": {
@@ -154,10 +164,25 @@
                               "labelFontSize": axis_font_size
                           }
                       },
-                      "text": {"field": "prirustkovy_pocet_nakazenych"},
+                      "text": {
+                          "field": "new_cases_seven_day_average",
+                          "format": "d",
+                      },
                       "color": {"value": increment_chart_color}
                   },
                   "layer": [
+                      {
+                          "encoding": {
+                              "y": {"field": "new_cases_seven_day_ci0"},
+                              "y2": {"field": "new_cases_seven_day_ci1"},
+                              "tooltip": null
+                          },
+                          "mark": {
+                              "type": "errorband",
+                              "opacity": 0.3,
+                              "color": increment_chart_color,
+                          }
+                      },
                       {
                           "mark": {"type": "line", "opacity": 1, "color": increment_chart_color}
                       },
